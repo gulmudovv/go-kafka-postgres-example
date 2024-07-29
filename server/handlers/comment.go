@@ -52,7 +52,7 @@ func CreateComment(c *fiber.Ctx) error {
 
 	err = c.JSON(&fiber.Map{
 		"success": true,
-		"message": "Comment pushed successfully",
+		"message": "Comment added successfully",
 	})
 	if err != nil {
 		c.Status(500).JSON(&fiber.Map{

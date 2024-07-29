@@ -1,15 +1,25 @@
-# Realtime Feed
+Микросервис Go Kafka Postgres Docker 
+
+Простой микросервис для обработки и добавления комментарий от пользователя с помощью языка программирования Go, Postgres в качестве базы данных и Apache Kafka брокера сообщений и Docker.
+
+## Обзор
+
+В этом примере:
+    Пользователь отправляет HTTP запрос на первый микросервис server  используя Postman
+    Первый микросервис server получает запрос добавляет запись в базу данных и отправляет через  Kafka на второй микросервис worker для обработки сообщений
+    Второй микросервис обрабатывает комментарий и отправляет обработанный комментарий на первый микросервис через Kafka 
+    Первый микросервис получает сообщение и обновляет запись в БД и помечает комментарий как обработанный.
+
+## Требования
+
+Для запуска сервисов необходимо Docker. Для установки [installation guide](https://docs.docker.com/compose/install/).
+
+## Запуск
+
+1. git clone  https://github.com/gulmudovv/gomicroservice.git
+2. cd gomicroservice
+3. docker compose up --build
 
 
 
-## Requirements
 
-To run this example you will need Docker and docker-compose installed. See the [installation guide](https://docs.docker.com/compose/install/).
-
-## Running
-
-```bash
-docker-compose up
-```
-
-You should see the live feed of posts on the standard output.
