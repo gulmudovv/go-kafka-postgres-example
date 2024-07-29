@@ -1,0 +1,72 @@
+
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    depends_on:
+    - db
+    - kafka
+    volumes:
+    - .:/app
+    - $GOPATH/pkg/mod:/go/pkg/mod    
+    networks:
+      - kafka-network
+
+  worker:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+    - kafka
+    volumes:
+    - .:/app
+    - $GOPATH/pkg/mod:/go/pkg/mod   
+    networks:
+      - kafka-network
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    restart: unless-stopped
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    logging:
+      driver: none
+    networks:
+      - kafka-network
+  db:
+    image: postgres:alpine    
+    environment:      
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=test         
+      - POSTGRES_DB=test_db
+    ports:
+      - 5433:5432
+    volumes:     
+      - postgres-db:/var/lib/postgresql/data
+    networks:
+      - kafka-network
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    restart: unless-stopped
+    logging:
+      driver: none
+    depends_on:
+    - zookeeper
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"    
+    networks:
+      - kafka-network
+
+networks:
+  kafka-network:
+    driver: bridge 
+volumes:
+  postgres-db:
