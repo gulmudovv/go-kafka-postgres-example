@@ -20,6 +20,6 @@ func main() {
 	api.Get("/comments", handlers.GetAllComments)
 	api.Get("/stats", handlers.GetStats)
 
-	app.Listen(":80")
+	app.Listen(":8000")
 
 }
