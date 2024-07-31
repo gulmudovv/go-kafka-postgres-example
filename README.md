@@ -16,8 +16,8 @@
 
 ## Запуск
 
-1. git clone  https://github.com/gulmudovv/gomicroservice.git
-2. cd gomicroservice
+1. git clone  https://github.com/gulmudovv/go-kafka-postgres-example.git
+2. cd go-kafka-postgres-example
 3. docker compose up --build
 
 
