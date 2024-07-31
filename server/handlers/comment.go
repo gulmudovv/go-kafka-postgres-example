@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"strings"
 
 	"log"
 
@@ -25,7 +26,7 @@ func CreateComment(c *fiber.Ctx) error {
 		return err
 	}
 
-	if len(newComment.Content) <= 0 {
+	if len(strings.Trim(newComment.Content, " ")) <= 0 {
 		return c.Status(400).JSON(&fiber.Map{
 			"success": false,
 			"message": "Empty string",
@@ -68,7 +69,7 @@ func CreateComment(c *fiber.Ctx) error {
 func GetAllComments(c *fiber.Ctx) error {
 	var comments []models.Comment
 
-	result := models.Db.Select("ID", "Content").Find(&comments)
+	result := models.Db.Find(&comments)
 
 	if result.Error != nil {
 		c.Status(400).JSON(&fiber.Map{

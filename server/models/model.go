@@ -9,7 +9,7 @@ import (
 )
 
 type Comment struct {
-	gorm.Model
+	ID        uint   `json:"id"`
 	Content   string `json:"content" gorm:"text;not null;default:null"`
 	Processed uint   `json:"processed" gorm:"not null;default:0"`
 }
